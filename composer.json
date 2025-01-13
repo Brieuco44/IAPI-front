@@ -9,14 +9,26 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "symfony/console": "7.0.*",
-        "symfony/dotenv": "7.0.*",
-        "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.0.*",
-        "symfony/runtime": "7.0.*",
-        "symfony/yaml": "7.0.*"
+        "doctrine/dbal": "^4.2.1",
+        "doctrine/doctrine-bundle": "^2.13.1",
+        "doctrine/doctrine-migrations-bundle": "^3.3.1",
+        "doctrine/orm": "^3.3.1",
+        "ramsey/uuid": "^4.7.6",
+        "symfony/asset": "v7.2.0",
+        "symfony/console": "v7.2.1",
+        "symfony/debug-bundle": "v7.2.0",
+        "symfony/dotenv": "v7.2.0",
+        "symfony/flex": "v2.4.7",
+        "symfony/form": "v7.2.0",
+        "symfony/framework-bundle": "v7.2.2",
+        "symfony/http-client": "7.*",
+        "symfony/runtime": "v7.2.0",
+        "symfony/security-bundle": "v7.2.2",
+        "symfony/webpack-encore-bundle": "^2.2",
+        "symfony/yaml": "v7.2.0"
     },
     "require-dev": {
+        "symfony/maker-bundle": "v1.61.0"
     },
     "config": {
         "allow-plugins": {
@@ -64,7 +76,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "7.*"
         }
     }
 }
