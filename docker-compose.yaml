@@ -1,0 +1,13 @@
+services:
+  chathouse:
+    image: chathouse:latest
+    ports:
+      - "5173:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - chathouse-network
+
+networks:
+  chathouse-network:
+    driver: bridge
