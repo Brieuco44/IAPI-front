@@ -40,6 +40,9 @@ class Product
     #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'Product')]
     private Collection $orders;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->Review = new ArrayCollection();
@@ -152,6 +155,18 @@ class Product
         if ($this->orders->removeElement($order)) {
             $order->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

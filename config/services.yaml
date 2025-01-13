@@ -20,6 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     App\Security\AppAuthAuthenticator:
+        public: true
         tags: ['security.authenticator']
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

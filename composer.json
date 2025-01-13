@@ -33,7 +33,9 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "symfony/maker-bundle": "v1.61.0"
+        "symfony/maker-bundle": "v1.61.0",
+        "symfony/stopwatch": "7.*",
+        "symfony/web-profiler-bundle": "7.*"
     },
     "config": {
         "allow-plugins": {
