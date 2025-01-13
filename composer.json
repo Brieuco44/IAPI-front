@@ -14,6 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3.1",
         "doctrine/orm": "^3.3.1",
         "ramsey/uuid": "^4.7.6",
+        "ramsey/uuid-doctrine": "^2.1",
         "symfony/asset": "v7.2.0",
         "symfony/console": "v7.2.1",
         "symfony/debug-bundle": "v7.2.0",
@@ -24,8 +25,12 @@
         "symfony/http-client": "7.*",
         "symfony/runtime": "v7.2.0",
         "symfony/security-bundle": "v7.2.2",
+        "symfony/twig-bundle": "7.*",
+        "symfony/validator": "7.*",
         "symfony/webpack-encore-bundle": "^2.2",
-        "symfony/yaml": "v7.2.0"
+        "symfony/yaml": "v7.2.0",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "symfony/maker-bundle": "v1.61.0"
