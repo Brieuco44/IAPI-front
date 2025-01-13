@@ -13,6 +13,13 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <!-- Navbar -->
+        {% include 'communs/navbar.html.twig' %}
+
+        <!-- Main Content -->
+        <div class="container mx-auto py-8">
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>
