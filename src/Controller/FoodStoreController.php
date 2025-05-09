@@ -39,13 +39,21 @@ class FoodStoreController extends AbstractController
             throw $this->createNotFoundException('Product not found');
         }
 
+
         $review = new Review();
         $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
-        $review->setUser($this->getUser());
+
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$this->getUser()) {
+                $this->addFlash('error', 'You must be logged in to submit a review.');
+                return $this->redirectToRoute('app_login'); // Replace with your login route name
+            }
+
+            $review->setUser($this->getUser());
+
             $review->setProduct($product);
             $review->setDate(new \DateTime());
 
