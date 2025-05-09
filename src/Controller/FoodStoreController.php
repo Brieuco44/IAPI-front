@@ -43,6 +43,8 @@ class FoodStoreController extends AbstractController
         $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
+        $review->setUser($this->getUser());
+
         if ($form->isSubmitted() && $form->isValid()) {
             $review->setProduct($product);
             $review->setDate(new \DateTime());
@@ -52,7 +54,6 @@ class FoodStoreController extends AbstractController
 
             return $this->redirectToRoute('product_detail', ['id' => $id]);
         }
-
         $comments = $reviewRepository->findBy(['product' => $product], ['date' => 'DESC']);
 
         return $this->render('food_store/detail.html.twig', [

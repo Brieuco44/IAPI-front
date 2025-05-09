@@ -27,12 +27,26 @@
             {% for comment in comments %}
                 <div class="border border-gray-200 p-4 mb-4">
                     <p class="text-white">{{ comment.message }}</p>
-                    <p class="text-sm text-gray-500">Commented by {{ comment.user.email }} on {{ comment.date | date('d/m/Y H:i') }}</p>
+                    <p class="text-sm text-gray-500">
+                        Commented by
+                        {% if comment.user %}
+                            {% if app.user and app.user.id == comment.user.id %}
+                                You
+                            {% else %}
+                                {{ comment.user.username }}
+                            {% endif %}
+                        {% else %}
+                            Anonymous
+                        {% endif %}
+                        on {{ comment.date|date('d/m/Y H:i') }}
+                    </p>
                 </div>
             {% else %}
                 <p class="text-gray-500">No comments yet.</p>
             {% endfor %}
         </div>
+
+
 
 
         <div class="mt-8">
