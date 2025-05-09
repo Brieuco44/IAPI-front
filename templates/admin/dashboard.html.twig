@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-6">Product Reviews Dashboard</h1>
+
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <select id="filter-product" class="select select-bordered">
+                    <option value="">All Products</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <select id="filter-date" class="select select-bordered ml-2">
+                    <option value="">Sort by Date</option>
+                    <option value="asc">Oldest First</option>
+                    <option value="desc">Newest First</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+        </div>
+
+        <div id="reviews-list">
+            {% for review in reviews %}
+                <div class="border border-gray-300 p-4 mb-4 rounded-lg">
+                    <p class="text-lg font-semibold">{{ review.product.name }}</p>
+                    <p class="text-sm text-gray-500">Reviewed by {{ review.user ? review.user.username : 'Anonymous' }} on {{ review.date | date('d/m/Y H:i') }}</p>
+                    <p class="mt-2">{{ review.message }}</p>
+                </div>
+            {% else %}
+                <p class="text-gray-500">No reviews found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const productId = document.getElementById('filter-product').value;
+            const dateOrder = document.getElementById('filter-date').value;
+            let url = new URL(window.location.href);
+
+            if (productId) {
+                url.searchParams.set('product', productId);
+            } else {
+                url.searchParams.delete('product');
+            }
+
+            if (dateOrder) {
+                url.searchParams.set('date', dateOrder);
+            } else {
+                url.searchParams.delete('date');
+            }
+
+            window.location.href = url.toString();
+        }
+    </script>
+{% endblock %}
