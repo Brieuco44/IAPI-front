@@ -1,6 +1,6 @@
 <div class="navbar bg-base-100">
     <div class="flex-1">
-        <a class="btn btn-ghost text-xl">
+        <a href="{{ path('app_food_store') }}"  class="btn btn-ghost text-xl">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 mr-2" />
             <span>Papparoni's</span>
         </a>
@@ -39,25 +39,27 @@
         </div>
         <!-- Profile Dropdown -->
         <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                <div class="w-10 rounded-full">
-                    <img
-                            alt="User Avatar"
-                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+            {% if app.user %}
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img
+                                alt="User Avatar"
+                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+                    </div>
                 </div>
-            </div>
-            <ul
-                    tabindex="0"
-                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <li>
-                    <a class="justify-between">
-                        Profile
-                        <span class="badge">New</span>
-                    </a>
-                </li>
-{#                <li><a>Settings</a></li>#}
-                <li><a>Logout</a></li>
-            </ul>
+                <ul
+                        tabindex="0"
+                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li>
+                        <a class="justify-between">
+                            {{ app.user.email }}
+                        </a>
+                    </li>
+                    <li><a href="{{ path('app_logout') }}">Logout</a></li>
+                </ul>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+            {% endif %}
         </div>
     </div>
 </div>
