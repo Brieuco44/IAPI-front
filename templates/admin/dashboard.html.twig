@@ -70,10 +70,23 @@
                                 <span class="text-sm text-gray-400">By {{ review.user ? review.user.username : 'Anonymous' }}</span>
                                 {% if review.sentiment %}
                                     <span class="badge badge-sm badge-outline text-gray-200 border-gray-500">
-                                        {{ review.sentiment.label }} ({{ review.sentiment.score|number_format(2, '.', ',') }})
-                                    </span>
+                            {{ review.sentiment.label }} ({{ review.sentiment.score|number_format(2, '.', ',') }})
+                        </span>
                                 {% endif %}
                             </div>
+                            <div class="rating rating-sm pointer-events-none">
+                                {% for i in 1..5 %}
+                                    <input
+                                            type="radio"
+                                            name="commentRating{{ loop.index }}"
+                                            class="mask mask-star-2 bg-yellow-400"
+                                            aria-label="{{ i }} star"
+                                            {% if review.rating == i %}checked{% endif %}
+                                            disabled
+                                    />
+                                {% endfor %}
+                            </div>
+                            <span class="ml-2 text-sm text-gray-500">{{ review.rating }}/5</span>
                             <p class="text-gray-200 leading-relaxed">{{ review.message }}</p>
                         </div>
                     {% else %}
@@ -81,6 +94,7 @@
                     {% endfor %}
                 </div>
             </details>
+
         </div>
     </div>
 

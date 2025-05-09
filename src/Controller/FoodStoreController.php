@@ -44,7 +44,14 @@ class FoodStoreController extends AbstractController
         $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
+        $comments = $reviewRepository->findBy(
+            ['product' => $product],
+            ['date' => 'DESC']
+        );
 
+        $total  = array_sum(array_map(fn(Review $c) => $c->getRating(), $comments));
+        $count  = count($comments) ?: 1;
+        $avg    = $total / $count;
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$this->getUser()) {
@@ -53,6 +60,9 @@ class FoodStoreController extends AbstractController
             }
 
             $review->setUser($this->getUser());
+
+            $rating = $request->request->get('rating');
+            $review->setRating($rating);
 
             $review->setProduct($product);
             $review->setDate(new \DateTime());
@@ -65,9 +75,10 @@ class FoodStoreController extends AbstractController
         $comments = $reviewRepository->findBy(['product' => $product], ['date' => 'DESC']);
 
         return $this->render('food_store/detail.html.twig', [
-            'product' => $product,
-            'comments' => $comments,
-            'form' => $form->createView()
+            'product'    => $product,
+            'comments'   => $comments,
+            'form'       => $form->createView(),
+            'avgRating'  => $avg,
         ]);
     }
 }

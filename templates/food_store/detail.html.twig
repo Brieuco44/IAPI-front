@@ -16,6 +16,21 @@
             </div>
             <div>
                 <h1 class="text-4xl font-bold mb-4">{{ product.name }}</h1>
+                <div class="flex items-center mb-6">
+                    <div class="rating rating-lg pointer-events-none">
+                        {% for i in 1..5 %}
+                            <input
+                                    type="radio"
+                                    name="avgRating"
+                                    class="mask mask-star-2 bg-yellow-400"
+                                    value="{{ i }}"
+                                    {% if avgRating >= i %}checked{% endif %}
+                                    disabled
+                            />
+                        {% endfor %}
+                    </div>
+                    <span class="ml-2 text-gray-500">({{ avgRating|number_format(1, '.', ',') }} / 5)</span>
+                </div>
                 <p class="text-gray-600 text-lg mb-4">{{ product.description }}</p>
                 <p class="text-xl font-semibold mb-6">{{ product.price | number_format(2, '.', ',') }} €</p>
                 <button class="btn btn-primary">Add to Cart</button>
@@ -24,9 +39,25 @@
 
         <div class="mt-12">
             <h2 class="text-2xl font-bold mb-4">Comments</h2>
+
             {% for comment in comments %}
-                <div class="border border-gray-200 p-4 mb-4">
-                    <p class="text-white">{{ comment.message }}</p>
+                <div class="border border-gray-200 p-6 mb-4 rounded-lg bg-gray-50">
+                    <div class="flex items-center mb-2">
+                        <div class="rating pointer-events-none">
+                            {% for i in 1..5 %}
+                                <input
+                                        type="radio"
+                                        name="commentRating{{ loop.index }}"
+                                        class="mask mask-star-2 bg-orange-400"
+                                        aria-label="{{ i }} star"
+                                        {% if comment.rating == i %}checked{% endif %}
+                                        disabled
+                                />
+                            {% endfor %}
+                        </div>
+                        <span class="ml-2 text-sm text-gray-500">{{ comment.rating }}/5</span>
+                    </div>
+                    <p class="text-gray-800 mb-1">{{ comment.message }}</p>
                     <p class="text-sm text-gray-500">
                         Commented by
                         {% if comment.user %}
@@ -46,17 +77,36 @@
             {% endfor %}
         </div>
 
-
-
-
         <div class="mt-8">
             <h2 class="text-2xl font-bold mb-4">Add a Comment</h2>
+
             {{ form_start(form) }}
+
             <div class="mb-4">
-                {{ form_row(form.message, {'attr': {'class': 'input input-bordered w-full'}}) }}
+                {{ form_row(form.message) }}
             </div>
+
+            {# DaisyUI Rating Component #}
+            <div class="mb-4">
+                <label class="block mb-2">Your Rating:</label>
+                <div class="rating">
+                    {% for i in 1..5 %}
+                        <input
+                                type="radio"
+                                name="rating"
+                                value="{{ i }}"
+                                class="mask mask-star-2 bg-orange-400"
+                                aria-label="{{ i }} star"
+                                {% if i == 5 %}checked{% endif %}
+                        />
+                    {% endfor %}
+                </div>
+            </div>
+
             <button class="btn btn-primary mt-4">Submit</button>
+
             {{ form_end(form) }}
         </div>
+
     </div>
 {% endblock %}
