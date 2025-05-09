@@ -14,7 +14,7 @@ class ReviewType extends AbstractType
     {
         $builder
             ->add('message', TextareaType::class, [
-                'label' => 'Your Comment',
+                'label' => false,  // Disable the label
                 'attr' => [
                     'placeholder' => 'Write your comment here...',
                     'class' => 'textarea textarea-bordered w-full'

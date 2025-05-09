@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin
+{% endblock %}
+
+{% block body %}
+    <div class="justify-center items-center flex m-auto">
+        <div class="flex flex-col text-center ">
+             <h1 class="text-4xl">Bienvenue dans l'espace admin !</h1>
+        </div>
+    </div>
+    <div class="justify-center items-center flex m-auto">
+        <div>
+            <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+                <legend class="fieldset-legend">Admin</legend>
+                <div class="flex flex-col w-full justify-self-center">
+                    <a href="{{ path("admin_dashboard") }}" class="btn btn-wide btn-neutral m-4">
+                        <i class="fa-solid fa-users-gear"></i>Reviews dashboard
+                    </a>
+                </div>
+                </fieldset>
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}
