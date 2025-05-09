@@ -3,35 +3,50 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+	{% if app.user is null %}
+		<div class="justify-center items-center flex m-auto">
+			<fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+				<form method="post">
+					<legend class="fieldset-legend">Connexion</legend>
+					<div class="flex flex-col">
+						<input
+								type="email"
+								value="{{ last_username is not null ? last_username : '' }}"
+								name="_username"
+								id="username"
+								class="input my-2"
+								autocomplete="email"
+								required
+								autofocus
+						>
+						<input
+								type="password"
+								name="_password"
+								id="password"
+								class="input my-2"
+								autocomplete="current-password"
+								required
+						>
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+						{% if error %}
+							<div class="alert alert-error alert-dash">
+								{{ error.messageKey|trans(error.messageData, 'security') }}
+							</div>
+						{% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
-    </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+						<div class="flex flex-col items-center">
+							<button type="submit" class="btn btn-wide btn-neutral mt-4">
+								Connexion
+							</button>
+							<a href="{{ path('app_register') }}"
+							   class="text-sm text-blue-600 hover:underline mt-2">
+								Pas encore de compte ? Inscrivez-vous
+							</a>
+						</div>
+					</div>
+				</form>
+			</fieldset>
+		</div>
+	{% endif %}
 {% endblock %}

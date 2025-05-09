@@ -7,18 +7,17 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-
-<div class="container mx-auto py-8">
+    <div class="container mx-auto py-8">
     <h1 class="text-4xl font-bold text-center mb-8">La carte</h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for product in products %}
-            <div class="card bg-base-100 shadow-xl">
+            <a href="{{ path('product_detail', { id: product.id }) }}" class="card bg-base-100 shadow-xl">
                 <figure>
                     <img
-                        src="{{ asset('images/' ~ product.image) }}"
-                        alt="{{ product.name }}"
-                        class="w-full h-72 object-cover"
+                            src="{{ asset('images/' ~ product.image) }}"
+                            alt="{{ product.name }}"
+                            class="w-full h-72 object-cover"
                     />
                 </figure>
                 <div class="card-body">
@@ -28,8 +27,8 @@
                         <button class="btn btn-primary">Add to Cart</button>
                     </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
-</div>
+    </div>
 {% endblock %}

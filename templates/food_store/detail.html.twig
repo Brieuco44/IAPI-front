@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} - Product Details{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8">
+        <a href="{{ path('app_food_store') }}" class="flex items-center text-blue-600 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7A1 1 0 0111 3v4h7a1 1 0 011 1v4a1 1 0 01-1 1h-7v4a1 1 0 01-1 1z" clip-rule="evenodd" />
+            </svg>
+            Back to Products
+        </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <img src="{{ asset('images/' ~ product.image) }}" alt="{{ product.name }}" class="w-full h-96 object-cover">
+            </div>
+            <div>
+                <h1 class="text-4xl font-bold mb-4">{{ product.name }}</h1>
+                <p class="text-gray-600 text-lg mb-4">{{ product.description }}</p>
+                <p class="text-xl font-semibold mb-6">{{ product.price | number_format(2, '.', ',') }} €</p>
+                <button class="btn btn-primary">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold mb-4">Comments</h2>
+            {% for comment in comments %}
+                <div class="border border-gray-200 p-4 mb-4">
+                    <p class="text-white">{{ comment.message }}</p>
+                    <p class="text-sm text-gray-500">
+                        Commented by
+                        {% if comment.user %}
+                            {% if app.user and app.user.id == comment.user.id %}
+                                You
+                            {% else %}
+                                {{ comment.user.username }}
+                            {% endif %}
+                        {% else %}
+                            Anonymous
+                        {% endif %}
+                        on {{ comment.date|date('d/m/Y H:i') }}
+                    </p>
+                </div>
+            {% else %}
+                <p class="text-gray-500">No comments yet.</p>
+            {% endfor %}
+        </div>
+
+
+
+
+        <div class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">Add a Comment</h2>
+            {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_row(form.message, {'attr': {'class': 'input input-bordered w-full'}}) }}
+            </div>
+            <button class="btn btn-primary mt-4">Submit</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -7,7 +7,7 @@ security:
         myprovider:
             entity:
                 class: App\Entity\User
-                property: id
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -15,11 +15,12 @@ security:
         main:
             lazy: true
             provider: myprovider
-            custom_authenticator: App\Security\AppAuthAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                csrf_token_id: authenticate
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -39,4 +40,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/, roles:  }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: /, roles: PUBLIC_ACCESS }
+        - { path: ^/product, roles: PUBLIC_ACCESS }
