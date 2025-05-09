@@ -63,9 +63,22 @@ class AdminController extends AbstractController
             );
         }
 
+        $counts = ['POSITIVE' => 0, 'NEUTRAL' => 0, 'NEGATIVE' => 0];
+        foreach ($sentiments as $sent) {
+            if (!empty($sent['label']) && array_key_exists($sent['label'], $counts)) {
+                $counts[$sent['label']]++;
+            }
+        }
+
+        // Pass everything to Twig
         return $this->render('admin/dashboard.html.twig', [
-            'products'  => $products,
-            'reviews'   => $reviews
+            'products'       => $products,
+            'reviews'        => $reviews,
+            'stats'          => [
+                'positiveCount' => $counts['POSITIVE'],
+                'neutralCount'  => $counts['NEUTRAL'],
+                'negativeCount' => $counts['NEGATIVE'],
+            ],
         ]);
     }
 }

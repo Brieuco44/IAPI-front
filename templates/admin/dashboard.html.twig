@@ -3,12 +3,14 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen text-gray-100 py-12">
-        <div class="container mx-auto px-4">
+    <div class="flex min-h-screen">
+        <!-- Main Content -->
+        <div class="flex-1 text-gray-100 py-12 px-8">
             <header class="flex items-center justify-between mb-8">
                 <h1 class="text-4xl font-extrabold">Product Reviews Dashboard</h1>
             </header>
 
+            <!-- Filters -->
             <section class="bg-gray-800 rounded-2xl p-6 mb-8 shadow-lg">
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 min-w-[200px]">
@@ -41,35 +43,49 @@
                     </div>
 
                     <div class="flex items-end">
-                        <button class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-0">Apply Filters</button>
+                        <button class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-0" onclick="applyFilters()">Apply Filters</button>
                     </div>
                 </div>
             </section>
 
-            <section id="reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for review in reviews %}
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">{{ review.product.name }}</h2>
-                            <time class="text-sm text-gray-400">{{ review.date | date('d/m/Y H:i') }}</time>
+            <!-- Accordion: Chart -->
+            <details class="bg-gray-800 rounded-2xl mb-8 shadow-lg">
+                <summary class="cursor-pointer select-none p-6 text-xl font-semibold">Review Sentiment Chart</summary>
+                <div class="p-6 border-t border-gray-700">
+                    <canvas id="sentimentChart" height="150"></canvas>
+                </div>
+            </details>
+
+            <!-- Accordion: Reviews -->
+            <details open class="bg-gray-800 rounded-2xl p-6 shadow-lg">
+                <summary class="cursor-pointer select-none text-xl font-semibold mb-4">Reviews List</summary>
+                <div id="reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    {% for review in reviews %}
+                        <div class="bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow border border-gray-200">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold">{{ review.product.name }}</h2>
+                                <time class="text-sm text-gray-400">{{ review.date | date('d/m/Y H:i') }}</time>
+                            </div>
+                            <div class="flex items-center space-x-2 mb-4">
+                                <span class="text-sm text-gray-400">By {{ review.user ? review.user.username : 'Anonymous' }}</span>
+                                {% if review.sentiment %}
+                                    <span class="badge badge-sm badge-outline text-gray-200 border-gray-500">
+                                        {{ review.sentiment.label }} ({{ review.sentiment.score|number_format(2, '.', ',') }})
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <p class="text-gray-200 leading-relaxed">{{ review.message }}</p>
                         </div>
-                        <div class="flex items-center space-x-2 mb-4">
-                            <span class="text-sm text-gray-400">By {{ review.user ? review.user.username : 'Anonymous' }}</span>
-                            {% if review.sentiment %}
-                                <span class="badge badge-sm badge-outline text-gray-200 border-gray-500">
-                  {{ review.sentiment.label }} ({{ review.sentiment.score|number_format(2, '.', ',') }})
-                </span>
-                            {% endif %}
-                        </div>
-                        <p class="text-gray-200 leading-relaxed">{{ review.message }}</p>
-                    </div>
-                {% else %}
-                    <p class="col-span-full text-center text-gray-500">No reviews found.</p>
-                {% endfor %}
-            </section>
+                    {% else %}
+                        <p class="col-span-full text-center text-gray-500">No reviews found.</p>
+                    {% endfor %}
+                </div>
+            </details>
         </div>
     </div>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function applyFilters() {
             const params = new URLSearchParams(window.location.search);
@@ -83,5 +99,33 @@
 
             window.location.search = params.toString();
         }
+
+        // Chart Data
+        const sentimentData = {
+            labels: ['Positive', 'Neutral', 'Negative'],
+            datasets: [{
+                label: 'Number of Reviews',
+                data: [
+                    {{ stats.positiveCount }},
+                    {{ stats.neutralCount }},
+                    {{ stats.negativeCount }}
+                ],
+                backgroundColor: ['#10B981', '#FBBF24', '#EF4444'],
+                borderWidth: 1
+            }]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: sentimentData,
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        });
     </script>
 {% endblock %}
