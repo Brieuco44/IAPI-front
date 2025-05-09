@@ -3,59 +3,85 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold mb-6">Product Reviews Dashboard</h1>
+    <div class="min-h-screen text-gray-100 py-12">
+        <div class="container mx-auto px-4">
+            <header class="flex items-center justify-between mb-8">
+                <h1 class="text-4xl font-extrabold">Product Reviews Dashboard</h1>
+            </header>
 
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <select id="filter-product" class="select select-bordered">
-                    <option value="">All Products</option>
-                    {% for product in products %}
-                        <option value="{{ product.id }}">{{ product.name }}</option>
-                    {% endfor %}
-                </select>
+            <section class="bg-gray-800 rounded-2xl p-6 mb-8 shadow-lg">
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="filter-product" class="block text-sm font-medium mb-1">Product</label>
+                        <select id="filter-product" class="w-full select select-bordered bg-gray-700 border-gray-600 text-gray-100">
+                            <option value="">All Products</option>
+                            {% for product in products %}
+                                <option value="{{ product.id }}" {% if app.request.query.get('product') == product.id %}selected{% endif %}>{{ product.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                <select id="filter-date" class="select select-bordered ml-2">
-                    <option value="">Sort by Date</option>
-                    <option value="asc">Oldest First</option>
-                    <option value="desc">Newest First</option>
-                </select>
-            </div>
-            <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
-        </div>
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="filter-date" class="block text-sm font-medium mb-1">Sort by Date</label>
+                        <select id="filter-date" class="w-full select select-bordered bg-gray-700 border-gray-600 text-gray-100">
+                            <option value="">Default</option>
+                            <option value="asc" {% if app.request.query.get('date') == 'asc' %}selected{% endif %}>Oldest First</option>
+                            <option value="desc" {% if app.request.query.get('date') == 'desc' %}selected{% endif %}>Newest First</option>
+                        </select>
+                    </div>
 
-        <div id="reviews-list">
-            {% for review in reviews %}
-                <div class="border border-gray-300 p-4 mb-4 rounded-lg">
-                    <p class="text-lg font-semibold">{{ review.product.name }}</p>
-                    <p class="text-sm text-gray-500">Reviewed by {{ review.user ? review.user.username : 'Anonymous' }} on {{ review.date | date('d/m/Y H:i') }}</p>
-                    <p class="mt-2">{{ review.message }}</p>
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="filter-sentiment" class="block text-sm font-medium mb-1">Sentiment</label>
+                        <select id="filter-sentiment" class="w-full select select-bordered bg-gray-700 border-gray-600 text-gray-100">
+                            <option value="">All</option>
+                            <option value="POSITIVE" {% if app.request.query.get('sentiment') == 'POSITIVE' %}selected{% endif %}>Positive</option>
+                            <option value="NEUTRAL" {% if app.request.query.get('sentiment') == 'NEUTRAL' %}selected{% endif %}>Neutral</option>
+                            <option value="NEGATIVE" {% if app.request.query.get('sentiment') == 'NEGATIVE' %}selected{% endif %}>Negative</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-end">
+                        <button class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-0">Apply Filters</button>
+                    </div>
                 </div>
-            {% else %}
-                <p class="text-gray-500">No reviews found.</p>
-            {% endfor %}
+            </section>
+
+            <section id="reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for review in reviews %}
+                    <div class="bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">{{ review.product.name }}</h2>
+                            <time class="text-sm text-gray-400">{{ review.date | date('d/m/Y H:i') }}</time>
+                        </div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <span class="text-sm text-gray-400">By {{ review.user ? review.user.username : 'Anonymous' }}</span>
+                            {% if review.sentiment %}
+                                <span class="badge badge-sm badge-outline text-gray-200 border-gray-500">
+                  {{ review.sentiment.label }} ({{ review.sentiment.score|number_format(2, '.', ',') }})
+                </span>
+                            {% endif %}
+                        </div>
+                        <p class="text-gray-200 leading-relaxed">{{ review.message }}</p>
+                    </div>
+                {% else %}
+                    <p class="col-span-full text-center text-gray-500">No reviews found.</p>
+                {% endfor %}
+            </section>
         </div>
     </div>
 
     <script>
         function applyFilters() {
+            const params = new URLSearchParams(window.location.search);
             const productId = document.getElementById('filter-product').value;
             const dateOrder = document.getElementById('filter-date').value;
-            let url = new URL(window.location.href);
+            const sentiment = document.getElementById('filter-sentiment').value;
 
-            if (productId) {
-                url.searchParams.set('product', productId);
-            } else {
-                url.searchParams.delete('product');
-            }
+            productId ? params.set('product', productId) : params.delete('product');
+            dateOrder ? params.set('date', dateOrder) : params.delete('date');
+            sentiment ? params.set('sentiment', sentiment) : params.delete('sentiment');
 
-            if (dateOrder) {
-                url.searchParams.set('date', dateOrder);
-            } else {
-                url.searchParams.delete('date');
-            }
-
-            window.location.href = url.toString();
+            window.location.search = params.toString();
         }
     </script>
 {% endblock %}

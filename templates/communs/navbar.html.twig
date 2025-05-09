@@ -55,6 +55,13 @@
                             {{ app.user.email }}
                         </a>
                     </li>
+                    {% if app.user and app.user.isAdmin() %}
+                        <li>
+                            <a href='{{ path('app_admin') }}'>
+                                Admin
+                            </a>
+                        </li>
+                    {% endif %}
                     <li><a href="{{ path('app_logout') }}">Logout</a></li>
                 </ul>
             {% else %}
