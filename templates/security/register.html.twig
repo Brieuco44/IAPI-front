@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+	<div class="min-h-screen flex items-center justify-center ">
+		<div class="card w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
+			<h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Créez votre compte</h2>
+
+			{{ form_start(registrationForm, { attr: { class: 'space-y-4' } }) }}
+
+			{{ form_row(registrationForm.username, {
+				label: 'Nom d’utilisateur',
+				label_attr: { class: 'text-sm font-medium text-gray-700' },
+				attr: { placeholder: 'Choisissez un nom d’utilisateur', class: 'input input-bordered w-full' }
+			}) }}
+
+			{{ form_row(registrationForm.email, {
+				label: 'Adresse email',
+				label_attr: { class: 'text-sm font-medium text-gray-700' },
+				attr: { placeholder: 'you@example.com', class: 'input input-bordered w-full' }
+			}) }}
+
+			{{ form_row(registrationForm.plainPassword, {
+				label: 'Mot de passe',
+				label_attr: { class: 'text-sm font-medium text-gray-700' },
+				attr: { placeholder: '••••••••••', class: 'input input-bordered w-full' }
+			}) }}
+
+			<div class="flex justify-center mt-4">
+				<button type="submit" class="btn btn-primary w-full">S’inscrire</button>
+			</div>
+
+			{{ form_end(registrationForm) }}
+
+			<p class="text-center text-sm text-gray-600 mt-4">
+				Déjà un compte ? <a href="{{ path('app_login') }}" class="text-blue-600 hover:underline">Connectez-vous</a>
+			</p>
+		</div>
+	</div>
+{% endblock %}

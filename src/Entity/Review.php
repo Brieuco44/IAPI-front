@@ -26,6 +26,9 @@ class Review
     #[ORM\ManyToOne(inversedBy: 'Review')]
     private ?Product $product = null;
 
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $rating = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,17 @@ class Review
     {
         $this->product = $product;
 
+        return $this;
+    }
+
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(int $rating): static
+    {
+        $this->rating = $rating;
         return $this;
     }
 }

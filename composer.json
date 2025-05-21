@@ -30,7 +30,8 @@
         "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "v7.2.0",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+      "ext-http": "*"
     },
     "require-dev": {
         "symfony/maker-bundle": "v1.61.0",
