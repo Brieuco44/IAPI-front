@@ -12,5 +12,6 @@ module.exports = {
     require("tailwindcss"),
     require("autoprefixer"),
   ],
+  themes: ["dark"]
 }
 
